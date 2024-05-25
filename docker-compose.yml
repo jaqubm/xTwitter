@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  
+  mongodb:
+    image: "mongo"
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - data:/data/db
+    networks:
+      - express-mongo
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
+    networks:
+      - express-mongo
+      - react-express
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    stdin_open: true
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - react-express
+
+networks:
+  react-express:
+  express-mongo:
+
+volumes:
+  data:
