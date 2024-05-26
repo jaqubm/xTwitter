@@ -17,23 +17,15 @@ export const signup = async (req, res) => {
     const { username, fullName, email, password } = req.body;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: "Invalid email format" });
-    }
+    if (!emailRegex.test(email)) return res.status(400).json({ error: "Invalid email format" });
 
     const existingUsername = await User.findOne({ username });
-    if (existingUsername) {
-      return res.status(400).json({ error: "Username is already taken" });
-    }
+    if (existingUsername) return res.status(400).json({ error: "Username is already taken" });
 
     const existingEmail = await User.findOne({ email });
-    if (existingEmail) {
-      return res.status(400).json({ error: "Email is already taken" });
-    }
+    if (existingEmail) return res.status(400).json({ error: "Email is already taken" });
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: "Password must be at least 6 characters long" });
-    }
+    if (password.length < 6) return res.status(400).json({ error: "Password must be at least 6 characters long" });
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -60,9 +52,7 @@ export const signup = async (req, res) => {
         profileImg: newUser.profileImg,
         coverImg: newUser.coverImg,
       });
-    } else {
-      return res.status(400).json({ error: "Invalid user data" } );
-    }
+    } else return res.status(400).json({ error: "Invalid user data" } );
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -75,9 +65,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({ username });
     const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
 
-    if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid username or password" });
-    }
+    if (!user || !isPasswordCorrect) return res.status(400).json({ error: "Invalid username or password" });
 
     generateTokenAndSetCookie(user._id, res);
 
