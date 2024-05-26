@@ -1,6 +1,7 @@
 services:
   
   mongodb:
+    container_name: xTwitter_db
     image: "mongo"
     restart: always
     ports:
@@ -11,6 +12,7 @@ services:
       - express-mongo
 
   backend:
+    container_name: xTwitter_backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -27,6 +29,7 @@ services:
       - react-express
 
   frontend:
+    container_name: xTwitter_frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
