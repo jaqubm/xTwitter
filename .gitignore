@@ -318,3 +318,5 @@ fabric.properties
 
 # and uncomment the following lines
 # .pnp.*
+
+.idea
