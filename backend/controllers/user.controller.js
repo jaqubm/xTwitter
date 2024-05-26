@@ -56,15 +56,17 @@ export const followOrUnfollowUser = async (req, res) => {
             await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } });
             await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } });
 
+            await Notification.findOneAndDelete({ from: req.user._id, to: id, type: "follow" });
+
             res.status(200).json({ message: "User unfollowed successfully" });
         } else {
             await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } });
             await User.findByIdAndUpdate(req.user._id, { $push: { following: id } });
 
             const newNotification = new Notification({
-                type: "follow",
                 from: req.user._id,
-                to: id
+                to: id,
+                type: "follow",
             });
 
             await newNotification.save();
@@ -130,7 +132,6 @@ export const updateUser = async (req, res) => {
 
         return res.status(200).json(user);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: "Internal server error" });
     }
 }
