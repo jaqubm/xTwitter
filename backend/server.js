@@ -1,4 +1,5 @@
 import express from "express"
+import cors from "cors"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
@@ -18,7 +19,13 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+const corsOptions = {
+  origin: "http://localhost:5173",
+};
+
 const app = express();
+app.use(cors(corsOptions));
+
 const PORT = process.env.PORT || 8000;
 
 // Parsing req.body to JSON

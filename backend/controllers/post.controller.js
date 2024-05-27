@@ -17,6 +17,7 @@ export const getAllPosts = async (req, res) => {
         res.status(200).json(posts);
     } catch (error) {
         res.status(500).json({ message: "Internal Server error" });
+        console.error(error.message);
     }
 }
 
@@ -38,6 +39,7 @@ export const getFollowingPosts = async (req, res) => {
         res.status(200).json(feedPosts);
     } catch (error) {
         res.status(500).json({ message: "Internal Server error" });
+        console.error(error.message);
     }
 }
 
@@ -56,6 +58,7 @@ export const getLikedPosts = async (req, res) => {
         res.status(200).json(likedPosts);
     } catch (error) {
         res.status(500).json({ message: "Internal Server error" });
+        console.error(error.message);
     }
 }
 
@@ -75,6 +78,7 @@ export const getUserPosts = async (req, res) => {
         res.status(200).json(posts);
     } catch (error) {
         res.status(500).json({ message: "Internal Server error" });
+        console.error(error.message);
     }
 }
 
@@ -104,6 +108,7 @@ export const createPost = async (req, res) => {
         res.status(201).json(newPost);
     } catch (error) {
         res.status(500).json({ message: "Internal Server error" });
+        console.error(error.message);
     }
 }
 
@@ -139,8 +144,8 @@ export const likeOrUnlikePost = async (req, res) => {
             res.status(200).json({ message: "Post liked successfully" });
         }
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server error" });
+        console.error(error.message);
     }
 }
 
@@ -166,6 +171,7 @@ export const commentPost = async (req, res) => {
         res.status(200).json(post);
     } catch (error) {
         res.status(500).json({ message: "Internal Server error" });
+        console.error(error.message);
     }
 }
 
@@ -187,7 +193,7 @@ export const deletePost = async (req, res) => {
 
         res.status(200).json({ message: "Post deleted successfully" });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server error" });
+        console.error(error.message);
     }
 }

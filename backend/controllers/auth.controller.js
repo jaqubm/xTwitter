@@ -55,6 +55,7 @@ export const signup = async (req, res) => {
     } else return res.status(400).json({ error: "Invalid user data" } );
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
+    console.error(error.message);
   }
 };
 
@@ -81,6 +82,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
+    console.error(error.message);
   }
 };
 
@@ -90,5 +92,6 @@ export const logout = async (req, res) => {
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
+    console.error(error.message);
   }
 };

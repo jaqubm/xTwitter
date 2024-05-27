@@ -14,6 +14,7 @@ export const getNotifications = async (req, res) => {
         res.status(200).json(notifications);
     } catch (error) {
         res.status(500).json({ error: "Internal Server error" });
+        console.error(error.message);
     }
 }
 
@@ -26,5 +27,6 @@ export const deleteNotifications = async (req, res) => {
         res.status(200).json({ message: "Notifications deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: "Internal Server error" });
+        console.error(error.message);
     }
 }
