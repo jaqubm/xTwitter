@@ -30,7 +30,7 @@ app.use(cors(corsOptions));
 const PORT = process.env.PORT || 8000;
 
 // Parsing req.body to JSON
-app.use(express.json());
+app.use(express.json({ limit: "1000kb" }));
 // Paring from data that is url encoded
 app.use(express.urlencoded({ extended: true }));
 // Parsing cookies
