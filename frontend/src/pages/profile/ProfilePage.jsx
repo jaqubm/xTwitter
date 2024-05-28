@@ -9,11 +9,12 @@ import { POSTS } from "../../utils/db/dummy";
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
-import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
+import { FaLink } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { formatMemberSinceDate } from "../../utils/functions";
 import useFollow from "../../hooks/useFollow";
+import useUpdateProfile from "../../hooks/useUpdateProfile";
 
 const ProfilePage = () => {
 	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
@@ -48,6 +49,8 @@ const ProfilePage = () => {
 			}
 		}
 	});
+
+	const { updateProfile, isUpdatingProfile } = useUpdateProfile();
 
 	const memberSince = formatMemberSinceDate(user?.createdAt);
 	const isMyProfile = authUser._id === user?._id;
@@ -131,7 +134,7 @@ const ProfilePage = () => {
 								</div>
 							</div>
 							<div className='flex justify-end px-4 mt-5'>
-								{isMyProfile && <EditProfileModal />}
+								{isMyProfile && <EditProfileModal authUser={ authUser } />}
 								{!isMyProfile && (
 									<button
 										className='btn btn-outline rounded-full btn-sm'
@@ -145,9 +148,13 @@ const ProfilePage = () => {
 								{(coverImg || profileImg) && (
 									<button
 										className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
-										onClick={() => alert("Profile updated successfully")}
+										onClick={async () => {
+											await updateProfile({ coverImg, profileImg });
+											setProfileImg(null);
+											setCoverImg(null);
+										}}
 									>
-										Update
+										{isUpdatingProfile ? "Updating..." : "Save"}
 									</button>
 								)}
 							</div>
@@ -160,7 +167,20 @@ const ProfilePage = () => {
 								</div>
 
 								<div className='flex gap-2 flex-wrap'>
-									{user?.link && <div />}
+									{user?.link && (
+										<div className='flex gap-1 items-center '>
+											<>
+												<FaLink className='w-3 h-3 text-slate-500' />
+												<a
+													href={"http://" + user?.link}
+													target='_blank'
+													rel='noreferrer'
+													className='text-sm text-blue-500 hover:underline' >
+													{user?.link}
+												</a>
+											</>
+										</div>
+									)}
 									<div className='flex gap-2 items-center'>
 										<IoCalendarOutline className='w-4 h-4 text-slate-500' />
 										<span className='text-sm text-slate-500'>{ memberSince }</span>
