@@ -27,13 +27,15 @@ function App() {
 
         const data = await res.json();
 
+        if (data.error) return null;
         if (!res.ok) throw new Error(data.error || "Something went wrong");
 
         return data;
       } catch (error) {
         throw new Error(error);
       }
-    }
+    },
+    retry: false,
   });
 
   if (isLoading) {
@@ -47,7 +49,7 @@ function App() {
   return (
     <div className='flex max-w-6xl mx-auto'>
 
-      <SideBar />
+      {authUser && <SideBar />}
 
       <Routes>
         <Route path='/' element={authUser ? <HomePage /> : <Navigate to='/login' />} />
@@ -57,7 +59,7 @@ function App() {
         <Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to='/login' />} />
       </Routes>
 
-      <RightPanel />
+      {authUser && <RightPanel />}
 
       <Toaster />
 
