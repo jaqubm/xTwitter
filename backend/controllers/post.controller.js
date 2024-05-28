@@ -12,7 +12,7 @@ export const getAllPosts = async (req, res) => {
             .populate("user", "username profileImg")
             .populate("comments.user", "username profileImg");
 
-        if (posts.length === 0) return res.status(200).json({ message: [] });
+        if (posts.length === 0) return res.status(200).json([]);
 
         res.status(200).json(posts);
     } catch (error) {
