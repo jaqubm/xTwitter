@@ -77,7 +77,43 @@ const Post = ({ post }) => {
 		},
 	});
 
-	const isCommenting = false;
+	const { mutate: commentPost, isPending: isCommenting } = useMutation({
+		mutationFn: async () => {
+			try {
+				const res = await fetch(`http://localhost:8000/api/posts/comment/${post._id}`, {
+					method: "POST",
+          credentials: "include",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ text: comment }),
+				 });
+
+				 const data = await res.json();
+
+				 if (!res.ok) throw new Error(data.error || "Something went wrong!");
+
+				 return data;
+			} catch (error) {
+				throw new Error(error.message);
+			}
+		},
+		onSuccess: (updatedPost) => {
+			setComment("");
+
+			queryClient.setQueryData(["posts"], (oldData) => {
+				return oldData.map((p) => {
+					if (p._id === post._id) {
+						return { ...p, comments: updatedPost.comments };
+					}
+					return p;
+				});
+			});
+		},
+		onError: (error) => {
+			toast.error(error.message);
+		},
+	});
 
 	const handleDeletePost = () => {
 		deletePost();
@@ -85,6 +121,8 @@ const Post = ({ post }) => {
 
 	const handlePostComment = (e) => {
 		e.preventDefault();
+		if (isCommenting) return;
+		commentPost();
 	};
 
 	const handleLikePost = () => {
