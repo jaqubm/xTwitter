@@ -23,6 +23,7 @@ const SignUpPage = () => {
 			try {
 				const res = await fetch("http://localhost:8000/api/auth/signup", {
 					method: "POST",
+					credentials: "include",
 					headers: {
 						"Content-Type": "application/json"
 					},
