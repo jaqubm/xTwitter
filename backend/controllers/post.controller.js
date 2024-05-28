@@ -128,9 +128,12 @@ export const likeOrUnlikePost = async (req, res) => {
 
             await Notification.findOneAndDelete({ from: userId, to: post.user, type: "like" });
 
-            res.status(200).json({ error: "Post unliked successfully" });
+            const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
+
+            res.status(200).json(updatedLikes);
         } else {
-            await Post.updateOne({ _id: postId }, { $push: { likes: userId } })
+            post.likes.push(userId);
+            await post.save();
             await User.updateOne({ _id: userId }, { $push: { likedPosts: postId } });
 
             const notification = new Notification({
@@ -141,7 +144,9 @@ export const likeOrUnlikePost = async (req, res) => {
 
             await notification.save();
 
-            res.status(200).json({ message: "Post liked successfully" });
+            const updatedLikes = post.likes;
+
+            res.status(200).json(updatedLikes);
         }
     } catch (error) {
         res.status(500).json({ error: "Internal Server error" });
