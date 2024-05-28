@@ -73,8 +73,6 @@ export const followOrUnfollowUser = async (req, res) => {
 
             await newNotification.save();
 
-            // TODO: Return the id of the user as the response
-
             res.status(200).json({ message: "User followed successfully" });
         }
     } catch (error) {
