@@ -320,5 +320,3 @@ fabric.properties
 # .pnp.*
 
 .idea
-
-.env
